@@ -1,6 +1,6 @@
 from tabulate import tabulate
 from instances import get_instance
-from Model import Job, Machine
+from Model import Job, Machine, Result
 from copy import copy
 
 
@@ -10,8 +10,7 @@ def draw(machines, info: bool = False):
 
     for m in machines:
         str += __get_machine(m) + '\n'
-    if info:
-        str += __get_info(machines)
+
     
     print(str)
 
@@ -25,21 +24,24 @@ def draw_table(jobs):
         table.append(weights)
     print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
 
-def __get_info(machines):
-    
-    str = "\n===== Total Completion times ======\n"
-    Cmax = [0, 0]
-    for m in machines:
-        c = m.get_total_completion_time()
+def draw_series_job(jobs):
 
-        if c > Cmax[1]: Cmax = [m.id, c]
+    arrow = " => "
+    str = "=============== Jobs series ================\n"
+    ids = [ job.id for job in jobs]
 
-        str += "M{}: {} \n".format(m.id, m) 
+    while (ids):
 
-    str += "The Cmax is M{}: {} \n".format(Cmax[0], Cmax[1])
-    str += "====================================\n"
-    return str
+        str += arrow + "| {} |".format(ids[0])
+        
+        del ids[0]
 
+    str += "\n"
+    print(str)
+
+def draw_Cmax(id, Cmax):
+    str = "The Cmax is M{}: {} \n".format(id, Cmax)
+    print(str)
 
 def __get_machine(machine: Machine):
     jobs = machine.jobs
@@ -61,10 +63,13 @@ def __get_jobs(job: Job, format):
 
     j = copy(job)
 
+    for i in range(job.idle):
+        time += " "
+
     process_time = j.process_time
 
-    if process_time > 10:
-        process_time = process_time - 1
+    # if process_time > 10:
+    #     process_time = process_time - 1
 
     for i in range(process_time):
         if i == int(process_time/2):
@@ -73,3 +78,5 @@ def __get_jobs(job: Job, format):
             time += sym
 
     return time
+
+    

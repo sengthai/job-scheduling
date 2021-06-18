@@ -6,7 +6,7 @@ from instances import *
 
 print("\n")
 
-machines = [Machine(0), Machine(2), Machine(3)]
+machines = [Machine(0), Machine(1), Machine(2)]
 jobs = [
     Job(0, 24),
     Job(1, 20),
@@ -24,35 +24,35 @@ print("  Cmax : ", SPT_result.Cmax)
 print("  Total C : ", SPT_result.total_completion_time)
 draw(SPT_result.machines) 
 
-for i in range(1):
-    has_weight = False
-    (jobs, machines) = get_instance(i, has_weight=has_weight)
+# for i in range(0):
+#     has_weight = False
+#     (jobs, machines) = get_instance(i, has_weight=has_weight)
     
-    LPT_result = PT(jobs, machines, 'LPT', is_optimize=True, has_weight=has_weight)
-    SPT_result = PT(jobs, machines, 'SPT', is_optimize=True, has_weight=has_weight)
-    OPT_result = OPT(jobs, machines, has_weight=has_weight)
+#     LPT_result = PT(jobs, machines, 'LPT', is_optimize=True, has_weight=has_weight)
+#     SPT_result = PT(jobs, machines, 'SPT', is_optimize=True, has_weight=has_weight)
+#     OPT_result = OPT(jobs, machines, has_weight=has_weight)
 
-    draw_table(jobs)
-    print("> LPT")
-    print("  Cmax : ", LPT_result.Cmax)
-    print("  Total Completion time : ", LPT_result.total_completion_time)
-    draw(LPT_result.machines)
+#     draw_table(jobs)
+#     print("> LPT")
+#     print("  Cmax : ", LPT_result.Cmax)
+#     print("  Total Completion time : ", LPT_result.total_completion_time)
+#     draw(LPT_result.machines)
 
-    print("> SPT")
-    print("  Cmax : ", SPT_result.Cmax)
-    print("  Total Completion time : ", SPT_result.total_completion_time)
-    draw(SPT_result.machines) 
+#     print("> SPT")
+#     print("  Cmax : ", SPT_result.Cmax)
+#     print("  Total Completion time : ", SPT_result.total_completion_time)
+#     draw(SPT_result.machines) 
 
     
-    print("> OPT")
-    print("  Cmax : ", OPT_result.Cmax)
-    print("  Total Completion time : ", OPT_result.total_completion_time)
-    draw(OPT_result.machines) 
+#     print("> OPT")
+#     print("  Cmax : ", OPT_result.Cmax)
+#     print("  Total Completion time : ", OPT_result.total_completion_time)
+#     draw(OPT_result.machines) 
 
-    print()
-    print('+++++++++++++++++++++++++++++++++++++++++++++')
-    print('+++++++++++++++++++++++++++++++++++++++++++++')
-    print()
+#     print()
+#     print('+++++++++++++++++++++++++++++++++++++++++++++')
+#     print('+++++++++++++++++++++++++++++++++++++++++++++')
+#     print()
     # L = LPT_result.Cmax 
     # S = SPT_result.Cmax
     # if S < L:c

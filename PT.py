@@ -1,11 +1,8 @@
 from copy import copy, deepcopy
-from typing import Optional
 
-from numpy.lib.utils import info
-from draw import draw, draw_table
-from Model import Machine, Result
-from instances import get_instance
-from itertools import groupby
+from Model import Result
+
+import numpy as np
 
 
 # This method is used to calcuate the processing time algorithm 
@@ -13,6 +10,12 @@ from itertools import groupby
 def PT(jobs, machines, rule: str, is_optimize=True, has_weight=False):
 
     sort_jobs: list = deepcopy(jobs)
+
+    # check if the job's process is list
+    if jobs and type(sort_jobs[-1].process_time) is list:
+        for job in sort_jobs:
+            job.process_time = sum(job.process_time)
+
     machines = deepcopy(machines)
 
     # check the rule if it is LPT or SPT
@@ -21,7 +24,7 @@ def PT(jobs, machines, rule: str, is_optimize=True, has_weight=False):
     # check it has weight
     if has_weight:
         # sort by the weight ratio ( weight/process_time )
-        sort_jobs.sort(key=lambda x: x.weight_ratio, reverse=is_reverse)
+        sort_jobs.sort(key=lambda x: x.weight_ratio, reverse= (not is_reverse))
     else:
         sort_jobs.sort(reverse=is_reverse)
 
@@ -54,29 +57,3 @@ def PT(jobs, machines, rule: str, is_optimize=True, has_weight=False):
     result = Result(machines, cmax_machine, total_completion_time)
 
     return result
-
-
-
-
-def select_machine(machines):
-    # check all machinces has the same jobs
-    
-    number_of_jobs = [ len(i.jobs) for i in machines]
-    
-    # if all m has no jobs
-    if len(machines[0].jobs) == 0:
-        return machines[0]
-
-    # check if all machines have the same jobs
-    if all_equal(number_of_jobs):
-        j = max(machines, key = lambda x: x.get_total_completion_time())
-        return j
-        
-    return min(machines, key = lambda x: x.get_total_completion_time())
-
-    
-    
-
-def all_equal(iterable):
-    g = groupby(iterable)
-    return next(g, True) and not next(g, False)

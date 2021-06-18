@@ -12,9 +12,9 @@ LPTs = []
 SPTs = []
 OPTs = []
 
-for i in range(1000):
+for i in range(5):
 
-    has_weight = False
+    has_weight = True
     (jobs, machines) = get_instance(i, has_weight=has_weight)
     
     LPT_result = PT(jobs, machines, 'LPT', is_optimize=True, has_weight=has_weight)

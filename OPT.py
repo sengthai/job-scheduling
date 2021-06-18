@@ -5,11 +5,17 @@ from itertools import permutations
 
 # Full enumration algorihtm (OPT, OPT with weight)
 def OPT(jobs, machines, has_weight=False):
-    jobs: list = deepcopy(jobs)
+
+    temp_jobs: list = deepcopy(jobs)
+
+    if jobs and type(temp_jobs[-1].process_time) is list:
+        for job in temp_jobs:
+            job.process_time = sum(job.process_time)
+
     machines: list = deepcopy(machines)
 
     # combination of all possible jobs
-    all  = list(permutations(jobs))
+    all  = list(permutations(temp_jobs))
 
     # store the best optimal solution
     insts = []

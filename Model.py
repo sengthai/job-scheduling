@@ -1,3 +1,5 @@
+import copy
+import numpy as np
 
 class Machine(object):
 
@@ -36,12 +38,26 @@ class Machine(object):
         del number_of_jobs
         return self.total_completion_time
     
+    def get_total_completion_time_2(self) -> int:
+        
+        total = 0
+
+        for job in self.jobs:
+            total += job.OUT * job.weight
+
+        return total
+
     def get_Cmax(self) -> int:
         total = 0
         for job in self.jobs:
-            total += job.process_time
+            total += np.sum(job.process_time) + job.idle
         
         return total
+    
+    def get_Cmax_2(self) -> int:
+        total = 0
+        for job in self.jobs:
+            total += job.OUT * job.weight
 
 class Job(object):
 
@@ -51,8 +67,11 @@ class Job(object):
         self.completion_time = 0
         self.machine: Machine = None
         self.weight = weight
-        self.weight_ratio = weight / process_time
+        self.weight_ratio = np.divide(weight, np.sum(process_time))
         self.makespan = 0
+        self.IN = 0
+        self.OUT = 0
+        self.idle = 0
 
     def __repr__(self): 
     
@@ -64,13 +83,14 @@ class Job(object):
 
 
     def __lt__(self, other):
-        return self.process_time < other.process_time
-
+        return np.sum(self.process_time) < np.sum(other.process_time)
+ 
 
 class Result():
 
-    def __init__(self, machines, Cmax_machine: Machine, total_completion_time):
+    def __init__(self, machines, Cmax_machine: Machine, total_completion_time, Cmax=0):
         self.machines = machines
-        self.Cmax = Cmax_machine.get_Cmax()
+        self.Cmax = Cmax
         self.Cmax_machine = Cmax_machine
         self.total_completion_time = total_completion_time
+
